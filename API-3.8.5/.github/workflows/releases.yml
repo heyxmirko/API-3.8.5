@@ -1,0 +1,26 @@
+name: Commit Releases
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        if: ${{ endsWith(github.event.commits[0].message, 'skip-ci') == 0 }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.commits[0].message }}
+          release_name: Release ${{ github.event.commits[0].message }}
+          body: |
+            Auto generated release
+          draft: false
+          prerelease: false

@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2' }
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath 'com.github.EnvyWare:PluginPublisher:-SNAPSHOT'
+    }
+}
+
+subprojects {
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'java'
+    apply plugin: "com.github.dosmike.PluginPublisher"
+
+    group = 'com.envyful.api'
+    version = '3.8.5'
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+//    task notifyDiscordChannel(type: de.dosmike.sponge.pluginpublisher.gradle.NotifyDiscordTask) {
+//        webHookUrl.set("")
+//        messageHeader.set("API BUILD ${System.getenv("VERSION")}") //is optional
+//        messageBody.set('This is published in channel 1')
+//    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://repo.lucko.me/' }
+        maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+        maven { url = "https://jitpack.io" }
+        maven {
+        	name = 'sponge'
+        	url = 'https://repo.spongepowered.org/maven'
+    	}
+    }
+}

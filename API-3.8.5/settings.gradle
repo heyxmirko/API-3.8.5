@@ -1,0 +1,17 @@
+rootProject.name = 'EnvyAPI'
+include 'commons'
+include 'forge'
+include 'forge16'
+include 'forge19'
+include 'reforged'
+include 'reforged16'
+include 'discord'
+include 'spigot'
+include 'velocity'
+
+// Mods
+include 'pixelmod16'
+include 'forgemod16'
+
+project(':pixelmod16').projectDir = new File("mods/pixelmod16")
+project(':forgemod16').projectDir = new File("mods/forge16")

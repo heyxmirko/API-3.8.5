@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven {
+            url = 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+minecraft {
+    mappings channel: 'official', version: '1.16.5'
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven {
+        name = 'spongepowered-repo'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+
+    ivy {
+        setUrl('https://download.nodecdn.net/containers/reforged/server/release')
+        metadataSources {
+            artifact()
+        }
+        patternLayout {
+            artifact('[revision]/[artifact].[ext]')
+        }
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
+
+    shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
+
+    shadow project(':commons')
+    shadow(project(':forge16'))
+
+    implementation 'pixelmon:Pixelmon-1.16.5-9.0.11-server:9.0.11'
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+//    dependsOn('reobfJar')
+
+    relocate('org.spongepowered.configurate', 'com.envyful.api.commons.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.api.commons.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.api.commons.shade.geantyref')
+
+    exclude 'net.minecraft'
+    exclude "**/module-info.class"
+}
+
+//reobf {
+//    shadowJar {}
+//}
+//
+//jar.finalizedBy('reobfJar')
